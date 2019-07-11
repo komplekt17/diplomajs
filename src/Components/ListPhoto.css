@@ -1,0 +1,12 @@
+.list_photos{
+	/*width:100%;
+    padding: 0 30px;*/
+}
+
+.btn-load{
+    position: fixed;
+    bottom: 2%;
+    height: 65px;
+    width: 65px;
+    border-radius: 50%;
+}

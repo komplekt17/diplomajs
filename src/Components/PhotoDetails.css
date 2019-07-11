@@ -1,0 +1,8 @@
+.photo-img{
+    float: left;
+    margin-right: 20px;
+}
+
+.photo-details ul{
+	list-style-type: none;
+}

@@ -1,12 +1,15 @@
-//import 'babel-polyfill'
-import React from 'react'
-import { render } from 'react-dom'
-//import { Router, Route, IndexRoute, browserHistory } from 'react-router'
+import React from "react";
+import ReactDOM from "react-dom";
+import { Provider } from "react-redux";
 
-import App from './containers/App'
-//import Auth from './components/Auth'
+import App from "./Container/App";
+import store from "./Services/redux-store";
 
-render(
-	<App />,
-	document.getElementById('root')
-)
+//import './animate.css';
+
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById("root")
+);

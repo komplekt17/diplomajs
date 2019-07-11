@@ -1,0 +1,9 @@
+.spin-loader {
+    position: fixed;
+    top: 40%;
+    display: flex;
+    justify-content: center;
+	width: 30%;
+    margin: 0 35%;
+    font-size: 150px;
+}
