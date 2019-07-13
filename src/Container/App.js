@@ -10,29 +10,36 @@ import {
   disLikePhoto, 
   getlistPhoto,
   getPhotoDetails,
-  getProfilePhotographer, 
+  getSearchPhotos, 
   getStatsTotal,
-  getPhotographerPhotos } from "../Services/unsplash-service";
+  getProfilePhotographer,
+  getPhotographerPhotos,
+  getProfileCurrentUser,
+  authenticationUrl,
+  setAccessTokenUnplash } from "../Services/unsplash-service";
 import {
-  loadPhotoAction, 
-  likePhotoAction, 
-  disLikePhotoAction, 
+  loadPhotoAction,
   loadProfileAction,
   loadPhotographerAction,
   loadPhotoDetailsAction,
+  loadPhotosPhotographerAction, 
+  loadSearchPhotosAction,
   logOutAction,
-  logInAction,
+  logInAction, 
+  likePhotoAction, 
+  disLikePhotoAction, 
   selectValueSortAction,
-  inputValueSearchAction, 
-  statsTotalAction,
-  photosPhotographerAction } from '../Actions/actions';
+  inputValueSearchAction,
+  handlerClickSearchAction,
+  statsTotalAction } from '../Actions/actions';
 
 import Header from '../Components/Header';
 import ListPhotos from '../Components/ListPhotos';
-import PhotographerProfile from '../Components/PhotographerProfile';
-import UserProfile from '../Components/UserProfile';
+import Photographer from '../Components/Photographer';
+import CurrentUser from '../Components/CurrentUser';
 import PhotoDetails from '../Components/PhotoDetails';
 import TotalStats from '../Components/TotalStats';
+import SearchResult from '../Components/SearchResult';
 
 import './App.css';
 
@@ -42,33 +49,19 @@ class App extends React.Component {
 
       const { loadPhotosToApp, storeToApp } = this.props;
 
+      const page = storeToApp.photos.length;
+      const per_page = storeToApp.stepLoad;
+
       let token = sessionStorage.getItem('token'); 
-      const data = getlistPhoto(
-        storeToApp.startLoad, 
-        storeToApp.finishLoad, 
-        storeToApp.sorting, 
-        token);
-      loadPhotosToApp(data, storeToApp.finishLoad);
+      const data = getlistPhoto(page, per_page, storeToApp.sorting, token);
+      loadPhotosToApp(data);
+      
   } 
 
-  // получение отформатированной даты создания/редактирования
-  getDateCreated = (string) => {
-      const arrD = string.split('T');
-      const arrT = arrD[1].split('-');
-      const result = arrD[0]+", "+arrT[0];
-      return result;
-  }
-
   componentDidMount = () => {
-    let {
-      //photos,  
-      startLoad,
-      finishLoad } = this.props.storeToApp;
-    this.loadPhotos(startLoad, finishLoad);
-
-    // if(photos.length === 0){
-    // }
+    if(!sessionStorage.getItem('token')) this.loadPhotos();
   }
+
 render(){
 
   const {
@@ -83,18 +76,51 @@ render(){
     logInToApp, 
     selectValueSortToApp,
     inputValueSearchToApp,
+    handlerClickSearchToApp,
+    loadSearchPhotosToApp,
     photosPhotographerApp } = this.props;
 
   let {
     profileUser,
     photoDetails,
-    firstPhoto,
-    lastPhoto,
+    photosPhotographer,
+    stepLoad,
     loading,
     sorting,
+    searchResult,
     searchQwery,
     totalStats, 
     error } = storeToApp;
+
+  // обработка авторизации
+  const setAccessToken = () => {
+      const code = window.location.search.split('code=')[1];
+      if (code) {
+          sessionStorage.setItem('token', code);
+          setAccessTokenUnplash(code);
+          logInToApp();
+      }
+  }
+
+  // обработка авторизации
+  const goLogIn = () => {
+      window.location.assign(authenticationUrl);
+      //logInToApp();
+  }
+
+  // обработка выхода из профиля
+  const goLogOut = () => {
+    sessionStorage.clear('token');
+    logOutToApp();
+  }
+
+  // получение отформатированной даты создания/редактирования
+  const getDateCreated = (string) => {
+      const arrD = string.split('T');
+      const arrT = arrD[1].split('-');
+      const result = arrD[0]+", "+arrT[0];
+      return result;
+  }
 
   // обработка лайков/дизлайков
   const changeLikeStatus = (id, status) => {
@@ -114,18 +140,39 @@ render(){
     }  
   }
 
-  // загрузка фото фотографа
-  const loadPhotosPhotographer = (username) => {
-    const data = getPhotographerPhotos(username, firstPhoto, lastPhoto, sorting);
-    photosPhotographerApp(data, lastPhoto);
+  // загрузка фото по поисковому запросу
+  const loadSearchPhotos = (qwery)=>{
+
+    const page = searchResult.searchPhotos.length;
+    const per_page = stepLoad;
+
+    const data = getSearchPhotos(qwery, page, per_page);
+    loadSearchPhotosToApp(data, qwery);
   }
 
+  // загрузка фото фотографа
+  const loadPhotosPhotographer = (username) => {
+
+    const page = photosPhotographer.length;
+    const per_page = stepLoad;
+
+    const data = getPhotographerPhotos(username, page, per_page, sorting);
+    photosPhotographerApp(data);
+  }
+
+  // извлекаем профиль текущего пользователя
+  const loadProfileUser = () => {
+    const data = getProfileCurrentUser();
+    loadProfileToApp(data);
+  }
+
+  // обработчик загрузки статистики сервиса unsplash
   const getTotalStats = () => {
     const data = getStatsTotal();
     statsTotalApp(data);
   }
 
-  // обработчик загрузки деталей фото
+  // обработчик загрузки деталей фотографии
   const loadPhotoDetails = (idPhoto) => {
     const data = getPhotoDetails(idPhoto);
     loadPhotoDetailsToApp(data);
@@ -142,22 +189,37 @@ render(){
 
   return (
       <Router>
-        <Header 
+        <Header
+          sorting={sorting} 
+          setAccessToken={setAccessToken}
           profileFromApp={profileUser}
-          sorting={sorting}
           searchQwery={searchQwery}
-          logInFromApp={logInToApp}
-          logOutFromApp={logOutToApp}
-          loadProfileFromApp={loadProfileToApp}
+          goLogIn={goLogIn}
+          goLogOut={goLogOut}
+          loadProfileUser={loadProfileUser}
           selectValueSort={selectValueSortToApp}
           inputValueSearch={inputValueSearchToApp} 
+          handlerClickSearch={handlerClickSearchToApp}
+          loadSearchPhotos={loadSearchPhotos}
           loadPhotoFromApp={this.loadPhotos}
           getTotalStats={getTotalStats}/>
         <Switch>
           <Route 
+            path="/search-result/"
+            render={()=>(
+              <SearchResult
+                storeFromApp={storeToApp}
+                loadSearchPhotos={loadSearchPhotos}
+                loadProfilePhotographer={loadProfilePhotographer}
+                loadPhotosPhotographer={loadPhotosPhotographer}
+                loadPhotoDetails={loadPhotoDetails}
+                getDateCreated={getDateCreated}
+                changeLikeStatus={changeLikeStatus}/>
+            )}/>
+          <Route 
             path="/user/"
             render={()=>(
-              <UserProfile 
+              <CurrentUser 
                 profileFromApp={profileUser} 
                 loading={loading}/>
             )}/>
@@ -171,12 +233,12 @@ render(){
           <Route 
             path="/photographer/:id"
             render={()=>(
-              <PhotographerProfile 
+              <Photographer 
                 storeFromApp={storeToApp}
                 loadProfilePhotographer={loadProfilePhotographer}
                 loadPhotosPhotographer={loadPhotosPhotographer}
                 loadPhotoDetails={loadPhotoDetails}
-                getDateCreated={this.getDateCreated}
+                getDateCreated={getDateCreated}
                 changeLikeStatus={changeLikeStatus}/>
             )}/>
           <Route
@@ -184,7 +246,7 @@ render(){
             render={()=>(
               <PhotoDetails
                 photoDetails={photoDetails}
-                getDateCreated={this.getDateCreated} 
+                getDateCreated={getDateCreated} 
                 loadProfilePhotographer={loadProfilePhotographer}
                 loadPhotosPhotographer={loadPhotosPhotographer}
                 loading={loading}/>
@@ -198,7 +260,7 @@ render(){
                 loadProfilePhotographer={loadProfilePhotographer}
                 loadPhotosPhotographer={loadPhotosPhotographer}
                 loadPhotoDetails={loadPhotoDetails}
-                getDateCreated={this.getDateCreated}
+                getDateCreated={getDateCreated}
                 changeLikeStatus={changeLikeStatus}/>
             )}/>
           <Redirect to='/' />
@@ -214,8 +276,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return ({
-    loadPhotosToApp: (data, end) => {
-      dispatch(loadPhotoAction(data, end))},
+    loadPhotosToApp: (data) => {
+      dispatch(loadPhotoAction(data))},
     likePhotoToApp: (idx, status) => {
       dispatch(likePhotoAction(idx, status))},
     disLikePhotoToApp: (idx, status) => {
@@ -223,13 +285,15 @@ const mapDispatchToProps = (dispatch) => {
     loadProfileToApp: (data) => dispatch(loadProfileAction(data)),
     loadPhotographerToApp: (data) => dispatch(loadPhotographerAction(data)),
     loadPhotoDetailsToApp: (data) => dispatch(loadPhotoDetailsAction(data)),
+    loadSearchPhotosToApp: (data, qwery) => dispatch(loadSearchPhotosAction(data, qwery)),
     logOutToApp: () => dispatch(logOutAction()),
     logInToApp: () => dispatch(logInAction()),
     selectValueSortToApp: (value) => dispatch(selectValueSortAction(value)),
     inputValueSearchToApp: (value) => dispatch(inputValueSearchAction(value)),
+    handlerClickSearchToApp: () => dispatch(handlerClickSearchAction()),
     statsTotalApp: (data) => dispatch(statsTotalAction(data)),
-    photosPhotographerApp: (data, end) => {
-      dispatch(photosPhotographerAction(data, end))},
+    photosPhotographerApp: (data) => {
+      dispatch(loadPhotosPhotographerAction(data))},
   })
 }
 

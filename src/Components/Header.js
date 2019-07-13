@@ -1,10 +1,5 @@
 import React from "react";
 import { NavLink, Link} from "react-router-dom";
-import {
-  authenticationUrl,
-  setAccessTokenUnplash,
-  getProfileCurrentUser
-} from "../Services/unsplash-service";
 import SortPhotos from '../Components/SortPhotos';
 import SearchPhotos from '../Components/SearchPhotos';
 
@@ -13,41 +8,19 @@ import "./Header.css";
 const Header = (props) => {
 
   const {
-    loadProfileFromApp, 
-    logInFromApp, 
-    logOutFromApp, 
-    profileFromApp,
     sorting, 
+    loadProfileUser,
+    loadSearchPhotos,
+    loadPhotoFromApp, 
+    goLogIn, 
+    goLogOut, 
+    profileFromApp,
     selectValueSort,
+    setAccessToken,
     searchQwery,
     inputValueSearch,
-    loadPhotoFromApp,
+    handlerClickSearch,
     getTotalStats } = props;
-
-  const setAccessToken = () => {
-      const code = window.location.search.split('code=')[1];
-      if (code) {
-          sessionStorage.setItem('token', code);
-          setAccessTokenUnplash(code);
-          logInFromApp();
-      }
-  }
-
-  const goLogIn = () => {
-      window.location.assign(authenticationUrl);
-  }
-
-  // обработка выхода из профиля
-  const goLogOut = () => {
-    sessionStorage.clear('token');
-    logOutFromApp();
-  }
-
-  // извлекаем профиль текущего пользователя
-  const loadProfileUser = () => {
-      const data = getProfileCurrentUser();
-      loadProfileFromApp(data);
-  }
 
   let logInLogOut = null;
   let profile = null;
@@ -59,8 +32,10 @@ const Header = (props) => {
       setAccessToken();
       logInLogOut = (
           <li onClick={()=>{goLogIn()}}>
-            <span>Sign In{" "}</span>
-            <i className="fas fa-sign-in-alt"></i>
+            <Link to="/">
+              <span>Sign In{" "}</span>
+              <i className="fas fa-sign-in-alt"></i>
+            </Link>
           </li>
         );
   }else {
@@ -106,6 +81,8 @@ const Header = (props) => {
             </li>
             <li>
               <SearchPhotos
+                loadSearchPhotos={loadSearchPhotos}
+                handlerClickSearch={handlerClickSearch}
                 searchQwery={searchQwery}
                 inputValueSearch={inputValueSearch}/>
             </li>

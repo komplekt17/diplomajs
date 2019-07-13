@@ -33,19 +33,22 @@ export const setAccessTokenUnplash = code => {
     });
 
 };
-
+/*
 export const getDownloadPhoto = (idPhoto) => {
-  unsplash.photos.getPhoto(idPhoto)
-    .then(toJson)
-    .then(json => {
-      unsplash.photos.downloadPhoto(json);
-    });
-}
 
-export const getPhotographerPhotos = (username, start, end, sorting) => {
+  unsplash.photos.getPhoto(idPhoto)
+  .then(toJson)
+  .then(json => {
+    const data = unsplash.photos.downloadPhoto(json);
+    data.then(res => console.log(res))
+  });
+
+}*/
+
+export const getPhotographerPhotos = (username, page, per_page, sorting) => {
 
   return unsplash.users
-    .photos(username, start, end, sorting, true)
+    .photos(username, page, per_page, sorting, true)
     .then(res => res.json());
 }
 
@@ -70,12 +73,12 @@ export const getProfileCurrentUser = () => {
     .then(res => res.json());
 }
 
-export const getlistPhoto = (start, end, sorting, access_token) => {
+export const getlistPhoto = (page, per_page, sorting, access_token) => {
 
   unsplash.auth.setBearerToken(access_token);
 
   return unsplash.photos
-    .listPhotos(start, end, sorting)
+    .listPhotos(page, per_page, sorting)
     .then(res => res.json());
 };
 

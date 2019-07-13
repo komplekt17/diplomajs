@@ -1,6 +1,7 @@
 .photo-img{
     float: left;
     margin-right: 20px;
+    min-height: 250px;
 }
 
 .photo-details ul{

@@ -59,6 +59,11 @@
 	line-height: 1.4;
 }
 
+.img_stats a:hover{
+    color: #F39C12;
+    text-decoration: none;
+}
+
 .img_stats i{
 	margin-right: 10px;
 }

@@ -1,4 +1,4 @@
-const loadPhotoAction = (data, itemEnd) => {
+const loadPhotoAction = (data) => {
     return dispatch => {
         dispatch({
             type: 'LOAD_REQUESTED_ACTION'
@@ -7,8 +7,7 @@ const loadPhotoAction = (data, itemEnd) => {
             .then(response => {
                 dispatch({
                     type: 'LOAD_PHOTOS_SUCCESS_ACTION',
-                    result: response, 
-                    end: itemEnd,
+                    result: response,
                     name: 'listPhotos'
                 });
             })
@@ -21,7 +20,7 @@ const loadPhotoAction = (data, itemEnd) => {
     }
 };
 
-const photosPhotographerAction = (data, itemEnd) => {
+const loadPhotosPhotographerAction = (data) => {
     return dispatch => {
         dispatch({
             type: 'LOAD_REQUESTED_ACTION'
@@ -30,8 +29,7 @@ const photosPhotographerAction = (data, itemEnd) => {
             .then(response => {
                 dispatch({
                     type: 'LOAD_PHOTOS_PHOTOGRAPHER_SUCCESS_ACTION',
-                    result: response, 
-                    end: itemEnd,
+                    result: response,
                     name: 'photosPhotographer'
                 });
             })
@@ -43,18 +41,29 @@ const photosPhotographerAction = (data, itemEnd) => {
             });
     }
 };
-    
-const likePhotoAction = (id, status) => {
-    return {
-        type: 'LIKE_PHOTO_ACTION',
-        id, status
-    }
-};
 
-const disLikePhotoAction = (id, status) => {
-    return {
-        type: 'DISLIKE_PHOTO_ACTION',
-        id, status
+const loadSearchPhotosAction = (data, qwery) => {
+    return dispatch => {
+        dispatch({
+            type: 'LOAD_REQUESTED_ACTION'
+        });
+        data
+            .then(response => {
+                dispatch({
+                    type: 'LOAD_SEARCH_PHOTOS_ACTION',
+                    result: response.results,
+                    total: response.total,
+                    pages: response.total_pages,
+                    qwery: qwery,
+                    name: 'searchPhotos'
+                });
+            })
+            .catch(error => {
+                dispatch({
+                    type: 'LOAD_FAILURE_ACTION',
+                    payload: error
+                });
+            });
     }
 };
 
@@ -120,6 +129,20 @@ const loadPhotoDetailsAction = (data) => {
             });
     }
 }
+    
+const likePhotoAction = (id, status) => {
+    return {
+        type: 'LIKE_PHOTO_ACTION',
+        id, status
+    }
+};
+
+const disLikePhotoAction = (id, status) => {
+    return {
+        type: 'DISLIKE_PHOTO_ACTION',
+        id, status
+    }
+};
 
 const logOutAction = () => {
     return {
@@ -147,6 +170,12 @@ const inputValueSearchAction = (value) => {
     }
 };
 
+const handlerClickSearchAction = () => {
+    return {
+        type: 'HANDLER_CLICK_SEARCH_ACTION'
+    }
+};
+
 const statsTotalAction = (data) => {
     return dispatch => {
         dispatch({
@@ -169,16 +198,18 @@ const statsTotalAction = (data) => {
 };
 
 export {
-    loadPhotoAction, 
-    likePhotoAction, 
-    disLikePhotoAction, 
+    loadPhotoAction,
+    loadSearchPhotosAction, 
     loadProfileAction,
     loadPhotographerAction,
     loadPhotoDetailsAction,
     logOutAction,
-    logInAction,
+    logInAction, 
+    likePhotoAction, 
+    disLikePhotoAction,
     selectValueSortAction,
     inputValueSearchAction,
+    handlerClickSearchAction,
     statsTotalAction,
-    photosPhotographerAction
+    loadPhotosPhotographerAction
 }

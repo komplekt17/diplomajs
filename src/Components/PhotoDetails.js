@@ -23,7 +23,10 @@ const PhotoDetail = (props) => {
 				<img src={photoDetails.urls.small} alt="photography" />
 			</div>
 			<div className="photo-details">
-				<p>description: {" "}{photoDetails.description}</p>	
+				<p>
+					<i className="fas fa-file-alt" data-toggle="tooltip" data-placement="top" title="Bio"></i> 
+				 	{" "}{photoDetails.description}
+				 </p>	
 				<ul>
 					<li>
 						<i className="far fa-user" data-toggle="tooltip" data-placement="top" title="User"></i>
@@ -70,6 +73,13 @@ const PhotoDetail = (props) => {
 	                    <i className="fas fa-camera" data-toggle="tooltip" data-placement="top" title="model"></i>
 	                    {" "}{photoDetails.exif.model}
 	                </li>
+	                {
+	                	/*
+              		<li>
+	                    <i className="fas fa-download" data-toggle="tooltip" data-placement="top" title="Download"></i>
+	                    <a href={`${photoDetails.links.download}?force=true`} download="" target="_blank" rel="noopener noreferrer">{" "}Download</a>
+                  </li>*/
+	                }
 				</ul>
 			</div>
 		</div>

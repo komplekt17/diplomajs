@@ -1,13 +1,16 @@
 const initialState = {
 	photos: [],
+	stepLoad: 50,
 	photosPhotographer: [],
+	searchResult: {
+		searchPhotos: [],
+        totalPhotos: 0,
+        pages: 0,
+        qwery: ''
+	},
 	profileUser: {},
 	profilePhotographer: {},
 	photoDetails: {},
-	startLoad: 0,
-	finishLoad: 30,
-	firstPhoto: 0,
-	lastPhoto: 30,
 	totalStats: {},
 	sorting: 'popular',
 	searchQwery: '',
@@ -21,7 +24,8 @@ const initialState = {
 const addLoadedPhotos = (state, photos, name) => {
 	let arr;
 	if(name === 'photosPhotographer') arr = state.photosPhotographer.slice();
-	else arr = state.photos.slice(); 
+	else if(name === 'searchPhotos') arr = state.searchResult.searchPhotos.slice();
+	else arr = state.photos.slice(); // name === 'listPhotos'
 	//объединяем массивы
 	const newArray = arr.concat(photos);
 	return newArray;
@@ -64,19 +68,30 @@ const Reducer = (state = initialState, action) => {
 			return {
 				...state,
 				photos: addLoadedPhotos(state, action.result, action.name),
-				startLoad: action.end + 0,
-				finishLoad: action.end + 30,
 		        loading: false,
 		        loaded: true,
 		        error: null
-			}
+			}	
+
+		case 'LOAD_SEARCH_PHOTOS_ACTION':
+			return{ 
+				...state,
+				searchResult: {
+					searchPhotos: addLoadedPhotos(state, action.result, action.name),
+                    totalPhotos: action.total,
+                    pages: action.pages,
+        			qwery: action.qwery
+				},
+				searchQwery: '',
+		        loading: false,
+		        loaded: true,
+		        error: null
+			}	
 
 		case 'LOAD_PHOTOS_PHOTOGRAPHER_SUCCESS_ACTION':
 			return{ 
 				...state,
 			photosPhotographer: addLoadedPhotos(state, action.result, action.name),
-				// firstPhoto: action.end + 0,
-				// lastPhoto: action.end + 30,
 		        loading: false,
 		        loaded: true,
 		        error: null
@@ -96,16 +111,13 @@ const Reducer = (state = initialState, action) => {
 				...state,
 				profilePhotographer: action.result,
 				photosPhotographer: [],
-				startLoad: 0,
-				finishLoad: 30,
-				firstPhoto: 0,
-				lastPhoto: 30,
 		        loading: false,
 		        loaded: true,
 		        error: null
 			}
 
 		case 'LOAD_DETAILS_SUCCESS_ACTION':
+		console.log(action.result)
 			return {
 				...state,
 				photoDetails: action.result,
@@ -149,8 +161,6 @@ const Reducer = (state = initialState, action) => {
 			return{ 
 				...state,
 				photos: [],
-				startLoad: 0,
-				finishLoad: 30,
 				sorting: action.value
 			};
 
@@ -158,6 +168,17 @@ const Reducer = (state = initialState, action) => {
 			return{ 
 				...state,
 				searchQwery: action.value
+			};
+
+		case 'HANDLER_CLICK_SEARCH_ACTION':
+			return{ 
+				...state,
+				searchResult: {
+					searchPhotos: [],
+			        totalPhotos: 0,
+			        pages: 0,
+        			qwery: ''
+				}
 			};
 
 		default:

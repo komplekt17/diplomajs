@@ -12,11 +12,14 @@
   margin: 0;
   padding: 0.5rem 1rem;
   border-radius: 3px;
+}
+
+.header ul li a{
   cursor: pointer;
 }
 
-.header ul li:hover {
-  border: 2px solud #00bc8c;
+.header ul li a:hover {
+  color: #3498DB;
 }
 
 .header a:hover {

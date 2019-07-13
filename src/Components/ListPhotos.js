@@ -1,8 +1,9 @@
 import React from 'react';
 import Loader from './Loader';
 import ItemPhoto from './ItemPhoto';
+import ButtonLoad from './ButtonLoad';
 
-import './ListPhoto.css';
+import './ListPhotos.css';
 
 const ListPhotos = (props) => {
 
@@ -39,11 +40,7 @@ const ListPhotos = (props) => {
         <div className="col-12">
           {
             loading ? <Loader /> : 
-            <button 
-              className="btn btn-outline-warning btn-load"  
-              onClick={()=>loadPhotoFromApp()}>
-              Load<br/> Photo
-            </button>
+            <ButtonLoad funcLoadPhotos={loadPhotoFromApp}/>
           }
         </div>
       </div>
