@@ -1,0 +1,10 @@
+.search-result ul{
+	display: flex;
+	justify-content: space-around;
+    margin-bottom: 10px;
+}
+
+.search-result ul li {
+  list-style: none;
+  display: inline-block;
+ }

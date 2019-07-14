@@ -1,0 +1,34 @@
+.photographer{
+	display: flex;
+	justify-content: center;
+}
+
+.avatar{
+	float: left;
+    height: 220px;
+    margin-right: 20px;
+}
+
+.avatar img{
+	width: 200px;
+}
+
+.profile, .profile-details{
+    display: flex;
+}
+
+.profile-bio, .profile-details{
+    width: 50%;
+}
+
+.profile-bio div:last-child{
+    margin-top: 20px;
+}
+
+.profile-details ul{
+	list-style-type: none;
+}
+
+i{
+	margin-right: 5px;
+}
