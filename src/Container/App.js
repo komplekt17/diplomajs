@@ -1,4 +1,7 @@
 import React from 'react';
+import $ from "jquery";
+import 'bootswatch/dist/darkly/bootstrap.min.css'
+import 'bootstrap/dist/js/bootstrap.min.js'
 import { 
   BrowserRouter as Router, 
   Route,
@@ -32,7 +35,6 @@ import {
   inputValueSearchAction,
   handlerClickSearchAction,
   statsTotalAction } from '../Actions/actions';
-
 import Header from '../Components/Header';
 import ListPhotos from '../Components/ListPhotos';
 import Photographer from '../Components/Photographer';
@@ -128,7 +130,7 @@ render(){
     if (sessionStorage.getItem('token') === 'undefined' || 
     sessionStorage.getItem('token') === '' || 
     !sessionStorage.getItem('token')){ 
-      alert('get token, please');
+      $('#modal-alert').modal('show'); // popup activate
     }else{
       if (!status) {
           likePhoto(id, sessionStorage.getItem('token'));
@@ -185,7 +187,7 @@ render(){
   }
 
   console.log(error);
-  console.log(storeToApp);
+  //console.log(storeToApp);
 
   return (
       <Router>

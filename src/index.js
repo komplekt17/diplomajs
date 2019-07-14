@@ -5,8 +5,6 @@ import { Provider } from "react-redux";
 import App from "./Container/App";
 import store from "./Services/redux-store";
 
-//import './animate.css';
-
 ReactDOM.render(
   <Provider store={store}>
     <App />

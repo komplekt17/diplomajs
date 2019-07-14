@@ -117,7 +117,6 @@ const Reducer = (state = initialState, action) => {
 			}
 
 		case 'LOAD_DETAILS_SUCCESS_ACTION':
-		console.log(action.result)
 			return {
 				...state,
 				photoDetails: action.result,

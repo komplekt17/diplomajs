@@ -28,7 +28,8 @@ const ListPhotos = (props) => {
             loadPhotosPhotographer={loadPhotosPhotographer} 
             getDateCreated={getDateCreated} 
             changeLikeStatus={changeLikeStatus} 
-            loadPhotoDetails={loadPhotoDetails}/>);
+            loadPhotoDetails={loadPhotoDetails}/>
+      );
   }
     
   return (

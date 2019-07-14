@@ -2,6 +2,7 @@ import React from "react";
 import { NavLink, Link} from "react-router-dom";
 import SortPhotos from '../Components/SortPhotos';
 import SearchPhotos from '../Components/SearchPhotos';
+import AlertMessages from './AlertMessages';
 
 import "./Header.css";
 
@@ -91,6 +92,7 @@ const Header = (props) => {
             {logInLogOut}
           </ul>
         </div>
+        <AlertMessages goLogIn={goLogIn}/>
       </div>
     </div>
   );
