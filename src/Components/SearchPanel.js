@@ -1,12 +1,12 @@
 import React from 'react';
 import { Link } from "react-router-dom";
 
-import './SearchPhotos.css'
+import './SearchPanel.css'
 
-const SearchPhotos = (props) => {
+const SearchPanel = (props) => {
 
 	const { 
-		inputValueSearch, 
+		handlerInputsValue, 
 		searchQwery,
 		loadSearchPhotos, 
 		handlerClickSearch } = props;
@@ -14,10 +14,8 @@ const SearchPhotos = (props) => {
 	return (
 		<div className="input-group mb-3">
 	        <input
-	            onChange={(ev) => {
-	            	inputValueSearch(ev.target.value);
-	            }} 
-	            id="Search"  
+	            onChange={(ev) => handlerInputsValue(ev.target.value, ev.target.id)} 
+	            id="search"  
 	        	type="text" 
 	        	className="form-control-sm" 
 	        	placeholder="Search"
@@ -26,7 +24,7 @@ const SearchPhotos = (props) => {
 	      		<Link to="/search-result/">
 		        	<div
 		        	onClick={()=>{
-		        		let elem = document.getElementById("Search");
+		        		let elem = document.getElementById("search");
 		        		if(elem.value !== ''){
 		        			handlerClickSearch();
 		        			loadSearchPhotos(searchQwery);
@@ -44,4 +42,4 @@ const SearchPhotos = (props) => {
 	);
 }
 
-export default SearchPhotos;
+export default SearchPanel;

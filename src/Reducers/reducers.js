@@ -19,6 +19,16 @@ const initialState = {
 	error: null
 }
 
+// сохранение изменённых полей input
+const saveInputValue = (state, name, value) => {
+	
+	const obj = state.profileUser;
+	for(var key in obj){
+		if(key === name) obj[key] = value;
+	}
+
+	return obj;
+}
 		
 // добавление в state новых  фотографий
 const addLoadedPhotos = (state, photos, name) => {
@@ -163,10 +173,18 @@ const Reducer = (state = initialState, action) => {
 				sorting: action.value
 			};
 
-		case 'INPUT_VALUE_SEARCH_ACTION':
-			return{ 
-				...state,
-				searchQwery: action.value
+		case 'HANDLER_INPUTS_VALUE_ACTION':
+			if(action.id === 'search'){
+				return{ 
+					...state,
+					searchQwery: action.value
+				};
+			}
+			else{
+				return{ 
+					...state,
+					profileUser: saveInputValue(state, action.id, action.value)
+				};
 			};
 
 		case 'HANDLER_CLICK_SEARCH_ACTION':

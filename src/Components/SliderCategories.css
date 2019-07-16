@@ -1,0 +1,13 @@
+.carousel{
+    margin: 0 0 30px 0;
+}
+
+.carousel-cell button{
+	width: 120px;
+    height: 36px;
+    overflow: hidden;
+}
+
+.carousel-cell button:hover{
+	background-color: #00bc8c;
+}

@@ -6,8 +6,6 @@ import './TotalStats.css';
 const TotalStats = ({ totalStats, loading }) => {
 
 	const {
-		total_photos,
-		photo_downloads,
 		photos,
 		downloads,
 		views } = totalStats;
@@ -19,13 +17,21 @@ const TotalStats = ({ totalStats, loading }) => {
 	          	{
 		            loading ? <Loader /> : 
 		            <div className="total-stats">
-		            	<h3>This is page TotalStats</h3>
+		            	<h3>Total Stats of Unsplash Service</h3>
 		            	<ul>
-		            		<li>total_photos:{" "}{total_photos}</li>
-		            		<li>photo_downloads:{" "}{photo_downloads}</li>
-		            		<li>photos:{" "}{photos}</li>
-		            		<li>downloads:{" "}{downloads}</li>
-		            		<li>views:{" "}{views}</li>
+		            		<li>
+		            			<i className="fas fa-images" data-toggle="tooltip" data-placement="top" 
+	                			title="photos"></i>
+		            			<span>{photos}{" "}photos</span>
+		            		</li>
+		            		<li>
+		            			<i className="fas fa-download" data-toggle="tooltip" data-placement="top" title="Download"></i>
+		            			<span>{downloads}{" "}downloads</span>
+		            		</li>
+		            		<li>
+		            			<i className="far fa-eye" data-toggle="tooltip" data-placement="top" title="views"></i>
+		            			<span>{views}{" "}views</span>
+	            			</li>
 		            	</ul>
 	            	</div>
 	          	}

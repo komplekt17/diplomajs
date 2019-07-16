@@ -20,6 +20,7 @@ export const authenticationUrl = unsplash.auth.getAuthenticationUrl([
   "public",
   "write_likes",
   "read_user",
+  "write_user",
   "read_photos"
 ]);
 
@@ -33,17 +34,6 @@ export const setAccessTokenUnplash = code => {
     });
 
 };
-/*
-export const getDownloadPhoto = (idPhoto) => {
-
-  unsplash.photos.getPhoto(idPhoto)
-  .then(toJson)
-  .then(json => {
-    const data = unsplash.photos.downloadPhoto(json);
-    data.then(res => console.log(res))
-  });
-
-}*/
 
 export const getPhotographerPhotos = (username, page, per_page, sorting) => {
 
@@ -68,14 +58,27 @@ export const getStatsTotal = () => {
 
 export const getProfileCurrentUser = () => {
 
+  const token = sessionStorage.getItem("token");
+  unsplash.auth.setBearerToken(token);
+
   return unsplash.currentUser
     .profile()
     .then(res => res.json());
 }
 
-export const getlistPhoto = (page, per_page, sorting, access_token) => {
+export const updateProfileCurrentUser = (objProfile) => {
 
-  unsplash.auth.setBearerToken(access_token);
+  unsplash.currentUser
+    .updateProfile(objProfile)
+    .then(toJson)
+    .then(json => {console.log(objProfile)});
+
+}
+
+export const getlistPhoto = (page, per_page, sorting) => {
+
+  const token = sessionStorage.getItem("token");
+  unsplash.auth.setBearerToken(token);
 
   return unsplash.photos
     .listPhotos(page, per_page, sorting)

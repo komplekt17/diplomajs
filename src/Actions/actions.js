@@ -163,10 +163,10 @@ const selectValueSortAction = (value) => {
     }
 };
 
-const inputValueSearchAction = (value) => {
+const handlerInputsValueAction = (value, id) => {
     return {
-        type: 'INPUT_VALUE_SEARCH_ACTION',
-        value
+        type: 'HANDLER_INPUTS_VALUE_ACTION',
+        value, id
     }
 };
 
@@ -208,7 +208,7 @@ export {
     likePhotoAction, 
     disLikePhotoAction,
     selectValueSortAction,
-    inputValueSearchAction,
+    handlerInputsValueAction,
     handlerClickSearchAction,
     statsTotalAction,
     loadPhotosPhotographerAction

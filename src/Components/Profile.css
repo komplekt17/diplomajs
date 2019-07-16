@@ -13,11 +13,20 @@
 	width: 200px;
 }
 
+#editBtn{
+	margin-left: 20px;
+}
+
+
 .profile, .profile-details{
     display: flex;
 }
 
 .profile-bio, .profile-details{
+    width: 50%;
+}
+
+.profile-details ul{
     width: 50%;
 }
 

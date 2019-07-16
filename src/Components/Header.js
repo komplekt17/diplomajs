@@ -1,8 +1,8 @@
 import React from "react";
 import { NavLink, Link} from "react-router-dom";
-import SortPhotos from '../Components/SortPhotos';
-import SearchPhotos from '../Components/SearchPhotos';
-import AlertMessages from './AlertMessages';
+import SortPanel from '../Components/SortPanel';
+import SearchPanel from '../Components/SearchPanel';
+import { AlertMessage, SuccessMessage } from './Messages';
 
 import "./Header.css";
 
@@ -19,7 +19,7 @@ const Header = (props) => {
     selectValueSort,
     setAccessToken,
     searchQwery,
-    inputValueSearch,
+    handlerInputsValue,
     handlerClickSearch,
     getTotalStats } = props;
 
@@ -75,24 +75,25 @@ const Header = (props) => {
           <ul className="d-flex menu">
             <li><NavLink to="/">Home</NavLink></li>
             <li>
-              <SortPhotos 
+              <SortPanel 
                 sorting={sorting}
                 selectValueSort={selectValueSort}
                 loadPhotoFromApp={loadPhotoFromApp}/>
             </li>
             <li>
-              <SearchPhotos
+              <SearchPanel
                 loadSearchPhotos={loadSearchPhotos}
                 handlerClickSearch={handlerClickSearch}
                 searchQwery={searchQwery}
-                inputValueSearch={inputValueSearch}/>
+                handlerInputsValue={handlerInputsValue}/>
             </li>
             {profile}
             {stats}
             {logInLogOut}
           </ul>
         </div>
-        <AlertMessages goLogIn={goLogIn}/>
+        <AlertMessage goLogIn={goLogIn}/>
+        <SuccessMessage />
       </div>
     </div>
   );

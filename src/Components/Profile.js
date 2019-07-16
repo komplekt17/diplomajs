@@ -2,19 +2,24 @@ import React from 'react';
 
 import './Profile.css';
 
-const Profile = ({profile}) => {
+const Profile = ({ profile }) => {
 
 	// извлечение тегов
 	const getTags = (arr) => {
-		let tags = null;
+		let tags = "";
 
 		for(let i=0; i<arr.length; i++){
 			tags += arr[i].title+", ";
 		}
-		return tags;
+		if(tags === null) return null;
+		else return tags;
 	}
 
-	return(
+	let profileItems = null;
+
+	if(Object.keys(profile).length !== 0){
+
+		profileItems = (
 		<div>
 			<div className="avatar">
 				<img src={profile.profile_image.large} alt="avatar"/>
@@ -24,18 +29,27 @@ const Profile = ({profile}) => {
 					<div>
 						<i className="fas fa-file-alt" data-toggle="tooltip"
 							 data-placement="top" title="Bio"></i>
-							 {profile.bio}
+						 <span>{profile.bio}</span>
 				 	</div>
 					<div>
 	                  	<i className="fas fa-tags" data-toggle="tooltip" data-placement="top" title="Tags"></i>
+	                      	{getTags(profile.tags.custom)}{" "}
 	                      	{getTags(profile.tags.aggregated)}
 	              	</div>
 				</div>
 				<div className="profile-details">
 					<ul>
 						<li>
-	                		<i className="fas fa-id-badge" data-toggle="tooltip" data-placement="top" title="identificator"></i>
-							<span>{profile.id}</span>
+							<i className="far fa-user" data-toggle="tooltip" data-placement="top" title="User"></i>
+							<span>{profile.first_name}{" "}{profile.last_name}</span>
+						</li>
+						<li>
+							<i className="far fa-smile" data-toggle="tooltip" data-placement="top" title="UserName"></i>
+							<span>{profile.username}</span>
+						</li>
+						<li>
+							<i className="far fa-envelope" data-toggle="tooltip" data-placement="top" title="email"></i>
+							<span>{profile.email}</span>
 						</li>
 						<li>
 	                		<i className="fab fa-instagram" data-toggle="tooltip" data-placement="top" title="instagram"></i>
@@ -46,10 +60,6 @@ const Profile = ({profile}) => {
 							<span>{profile.twitter_username}</span>
 						</li>
 						<li>
-	                		<i className="fas fa-map-marker-alt" data-toggle="tooltip" data-placement="top" title="Location"></i>
-							<span>{profile.location}</span>
-						</li>
-						<li>
 							<i className="fas fa-link" data-toggle="tooltip" data-placement="top" title="Link profile"></i>
 							<span className="img_stats-item">
 		                        <a href={profile.links.html} target="_blank" rel="noopener noreferrer">
@@ -57,8 +67,20 @@ const Profile = ({profile}) => {
 		                        </a>
 	                      	</span>
 						</li>
+						<li>
+							<i className="fas fa-link" data-toggle="tooltip" data-placement="top" title="Portfolio"></i>
+							<span>
+		                        <a href={profile.portfolio_url} target="_blank" rel="noopener noreferrer">
+		                          Site
+		                        </a>
+	                        </span>
+						</li>
 					</ul>
 					<ul>
+						<li>
+	                		<i className="fas fa-id-badge" data-toggle="tooltip" data-placement="top" title="identificator"></i>
+							<span>{profile.id}</span>
+						</li>
 						<li>
 	                		<i className="far fa-thumbs-up" data-toggle="tooltip" data-placement="top" title="total_likes"></i>
 							<span>
@@ -103,11 +125,18 @@ const Profile = ({profile}) => {
 		                    	{" "}downloads
 	                    	</span>
 	                  	</li>
+						<li>
+	                		<i className="fas fa-map-marker-alt" data-toggle="tooltip" data-placement="top" title="Location"></i>
+							<span>{profile.location}</span>
+						</li>
 					</ul>
 				</div>
 			</div>
 		</div>
-	);
+		);
+	}
+
+	return profileItems;
 }
 
 export default Profile;

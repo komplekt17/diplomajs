@@ -20,10 +20,7 @@ const ButtonLoad = ({searchQwery, username, funcLoadPhotos}) => {
 		return(
 			<button 
 	      		className="btn btn-outline-warning btn-load"  
-	      		onClick={()=>{
-	      			funcLoadPhotos(username);
-	      			console.log(username)
-	      		}}>
+	      		onClick={()=>funcLoadPhotos(username)}>
 	      		Load<br/> Photo
 	    	</button>
 		);

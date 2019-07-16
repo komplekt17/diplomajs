@@ -1,7 +1,7 @@
 import React from 'react';
 import $ from "jquery";
-import 'bootswatch/dist/darkly/bootstrap.min.css'
-import 'bootstrap/dist/js/bootstrap.min.js'
+import 'bootswatch/dist/darkly/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.min.js';
 import { 
   BrowserRouter as Router, 
   Route,
@@ -18,6 +18,7 @@ import {
   getProfilePhotographer,
   getPhotographerPhotos,
   getProfileCurrentUser,
+  updateProfileCurrentUser,
   authenticationUrl,
   setAccessTokenUnplash } from "../Services/unsplash-service";
 import {
@@ -32,7 +33,7 @@ import {
   likePhotoAction, 
   disLikePhotoAction, 
   selectValueSortAction,
-  inputValueSearchAction,
+  handlerInputsValueAction,
   handlerClickSearchAction,
   statsTotalAction } from '../Actions/actions';
 import Header from '../Components/Header';
@@ -54,8 +55,7 @@ class App extends React.Component {
       const page = storeToApp.photos.length;
       const per_page = storeToApp.stepLoad;
 
-      let token = sessionStorage.getItem('token'); 
-      const data = getlistPhoto(page, per_page, storeToApp.sorting, token);
+      const data = getlistPhoto(page, per_page, storeToApp.sorting);
       loadPhotosToApp(data);
       
   } 
@@ -77,7 +77,7 @@ render(){
     logOutToApp, 
     logInToApp, 
     selectValueSortToApp,
-    inputValueSearchToApp,
+    handlerInputsValueToApp,
     handlerClickSearchToApp,
     loadSearchPhotosToApp,
     photosPhotographerApp } = this.props;
@@ -168,6 +168,24 @@ render(){
     loadProfileToApp(data);
   }
 
+  // обновление профиля текущего пользователя
+  const updatingCurrentUser = (object) => {
+    updateProfileCurrentUser(object);
+  }
+
+ // поведение формы редактирования CurrentUser
+  const handlerVisibleFormEdit = (elemId) => {
+    if(elemId === 'editBtn'){
+      document.getElementById("editBtn").classList.toggle("invisible");
+      document.getElementById("editProfile").classList.toggle("invisible");
+    }
+    else{
+      document.getElementById("editBtn").classList.toggle("invisible");
+      document.getElementById("editProfile").classList.toggle("invisible");
+          $('#modal-success').modal('show'); // popup activate
+    }
+  }
+
   // обработчик загрузки статистики сервиса unsplash
   const getTotalStats = () => {
     const data = getStatsTotal();
@@ -200,7 +218,7 @@ render(){
           goLogOut={goLogOut}
           loadProfileUser={loadProfileUser}
           selectValueSort={selectValueSortToApp}
-          inputValueSearch={inputValueSearchToApp} 
+          handlerInputsValue={handlerInputsValueToApp} 
           handlerClickSearch={handlerClickSearchToApp}
           loadSearchPhotos={loadSearchPhotos}
           loadPhotoFromApp={this.loadPhotos}
@@ -211,28 +229,32 @@ render(){
             render={()=>(
               <SearchResult
                 storeFromApp={storeToApp}
-                loadSearchPhotos={loadSearchPhotos}
+                loadSearchPhotos={loadSearchPhotos} 
+                handlerClickSearch={handlerClickSearchToApp}
                 loadProfilePhotographer={loadProfilePhotographer}
                 loadPhotosPhotographer={loadPhotosPhotographer}
                 loadPhotoDetails={loadPhotoDetails}
                 getDateCreated={getDateCreated}
                 changeLikeStatus={changeLikeStatus}/>
             )}/>
-          <Route 
+          <Route exact
             path="/user/"
             render={()=>(
               <CurrentUser 
                 profileFromApp={profileUser} 
-                loading={loading}/>
+                loading={loading}
+                updatingCurrentUser={updatingCurrentUser}
+                handlerInputsValue={handlerInputsValueToApp}
+                handlerVisibleFormEdit={handlerVisibleFormEdit} />
             )}/>
-          <Route 
+          <Route exact
             path="/stats/"
             render={()=>(
               <TotalStats 
                 totalStats={totalStats}
                 loading={loading}/>
             )}/>
-          <Route 
+          <Route exact
             path="/photographer/:id"
             render={()=>(
               <Photographer 
@@ -243,7 +265,7 @@ render(){
                 getDateCreated={getDateCreated}
                 changeLikeStatus={changeLikeStatus}/>
             )}/>
-          <Route
+          <Route exact
             path="/photo/:id" 
             render={()=>(
               <PhotoDetails
@@ -291,7 +313,7 @@ const mapDispatchToProps = (dispatch) => {
     logOutToApp: () => dispatch(logOutAction()),
     logInToApp: () => dispatch(logInAction()),
     selectValueSortToApp: (value) => dispatch(selectValueSortAction(value)),
-    inputValueSearchToApp: (value) => dispatch(inputValueSearchAction(value)),
+    handlerInputsValueToApp: (value, id) => dispatch(handlerInputsValueAction(value, id)),
     handlerClickSearchToApp: () => dispatch(handlerClickSearchAction()),
     statsTotalApp: (data) => dispatch(statsTotalAction(data)),
     photosPhotographerApp: (data) => {
