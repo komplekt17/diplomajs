@@ -1,8 +1,9 @@
 import React from "react";
 import { NavLink, Link} from "react-router-dom";
-import SortPanel from '../Components/SortPanel';
-import SearchPanel from '../Components/SearchPanel';
+import SortPanel from './SortPanel';
+import SearchPanel from './SearchPanel';
 import { AlertMessage, SuccessMessage } from './Messages';
+import Arrow from './Arrow';
 
 import "./Header.css";
 
@@ -94,6 +95,7 @@ const Header = (props) => {
         </div>
         <AlertMessage goLogIn={goLogIn}/>
         <SuccessMessage />
+        <Arrow />
       </div>
     </div>
   );
